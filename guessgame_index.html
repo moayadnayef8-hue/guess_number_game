@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>خمن الرقم</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,sans-serif;background:#17212b;color:#fff;display:flex;justify-content:center;align-items:center;min-height:100vh}
+  .game{width:min(92%,420px);background:#243447;border-radius:24px;padding:24px;text-align:center;box-shadow:0 10px 30px #0005}
+  h1{margin:0 0 8px;font-size:30px}
+  p{color:#d9e2ea;margin:8px 0 20px}
+  .status{min-height:28px;font-size:18px;margin:12px 0 18px}
+  .numbers{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  button{border:0;border-radius:14px;padding:15px 8px;font-size:20px;font-weight:bold;cursor:pointer;background:#2aabee;color:#fff}
+  button:active{transform:scale(.96)}
+  .new{margin-top:18px;width:100%;background:#36c76b}
+  .small{font-size:14px;color:#aebdcc;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="game">
+  <h1>🎯 خمن الرقم</h1>
+  <p>البوت اختار رقمًا من 1 إلى 10. حاول تخمينه!</p>
+  <div class="status" id="status">اختر رقمًا 👇</div>
+  <div class="numbers" id="numbers"></div>
+  <button class="new" onclick="newGame()">لعبة جديدة 🔄</button>
+  <div class="small">كل جولة لها رقم عشوائي جديد.</div>
+</div>
+
+<script>
+let secret;
+let finished=false;
+
+function newGame(){
+  secret=Math.floor(Math.random()*10)+1;
+  finished=false;
+  document.getElementById('status').textContent='اختر رقمًا 👇';
+  document.querySelectorAll('.numbers button').forEach(b=>b.disabled=false);
+}
+
+function guess(n){
+  if(finished)return;
+  const s=document.getElementById('status');
+  if(n===secret){
+    s.textContent='🎉 صح! خمنت الرقم!';
+    finished=true;
+  }else if(n<secret){
+    s.textContent='⬆️ الرقم أكبر من '+n;
+  }else{
+    s.textContent='⬇️ الرقم أصغر من '+n;
+  }
+}
+
+const box=document.getElementById('numbers');
+for(let i=1;i<=10;i++){
+  const b=document.createElement('button');
+  b.textContent=i;
+  b.onclick=()=>guess(i);
+  box.appendChild(b);
+}
+newGame();
+</script>
+</body>
+</html>
