@@ -1,65 +1,110 @@
-<!DOCTYPE html>
+index.html<!<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>خمن الرقم</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chicken Road - إشارات تجريبية</title>
+
 <style>
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Arial,sans-serif;background:#17212b;color:#fff;display:flex;justify-content:center;align-items:center;min-height:100vh}
-  .game{width:min(92%,420px);background:#243447;border-radius:24px;padding:24px;text-align:center;box-shadow:0 10px 30px #0005}
-  h1{margin:0 0 8px;font-size:30px}
-  p{color:#d9e2ea;margin:8px 0 20px}
-  .status{min-height:28px;font-size:18px;margin:12px 0 18px}
-  .numbers{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-  button{border:0;border-radius:14px;padding:15px 8px;font-size:20px;font-weight:bold;cursor:pointer;background:#2aabee;color:#fff}
-  button:active{transform:scale(.96)}
-  .new{margin-top:18px;width:100%;background:#36c76b}
-  .small{font-size:14px;color:#aebdcc;margin-top:16px}
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#111827;
+  color:white;
+  text-align:center;
+}
+
+.game{
+  width:min(92%,420px);
+  margin:40px auto;
+  background:#1f2937;
+  padding:25px;
+  border-radius:20px;
+}
+
+h1{
+  margin:0 0 10px;
+  font-size:27px;
+}
+
+p{
+  color:#cbd5e1;
+}
+
+.signal{
+  margin:25px 0;
+  min-height:100px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#0f172a;
+  border-radius:16px;
+  font-size:25px;
+  font-weight:bold;
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:16px;
+  font-size:19px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.note{
+  margin-top:18px;
+  font-size:13px;
+  color:#94a3b8;
+}
 </style>
 </head>
+
 <body>
+
 <div class="game">
-  <h1>🎯 خمن الرقم</h1>
-  <p>البوت اختار رقمًا من 1 إلى 10. حاول تخمينه!</p>
-  <div class="status" id="status">اختر رقمًا 👇</div>
-  <div class="numbers" id="numbers"></div>
-  <button class="new" onclick="newGame()">لعبة جديدة 🔄</button>
-  <div class="small">كل جولة لها رقم عشوائي جديد.</div>
+
+<h1>🐔 Chicken Road</h1>
+
+<p>مولّد إشارات تجريبية</p>
+
+<div class="signal" id="signal">
+اضغط للحصول على إشارة
+</div>
+
+<button onclick="getSignal()">
+🎯 احصل على إشارة
+</button>
+
+<div class="note">
+⚠️ هذه إشارات تجريبية عشوائية وليست توقعًا مضمونًا لنتيجة اللعبة.
+</div>
+
 </div>
 
 <script>
-let secret;
-let finished=false;
 
-function newGame(){
-  secret=Math.floor(Math.random()*10)+1;
-  finished=false;
-  document.getElementById('status').textContent='اختر رقمًا 👇';
-  document.querySelectorAll('.numbers button').forEach(b=>b.disabled=false);
+function getSignal(){
+
+  const signals = [
+    "🟢 جرّب الخروج عند 1.50x",
+    "🟢 جرّب الخروج عند 1.75x",
+    "🟢 جرّب الخروج عند 2.00x",
+    "🟡 إشارة حذرة: 1.40x",
+    "🟡 إشارة حذرة: 1.60x",
+    "🔴 إشارة تجريبية: انتظر الجولة التالية"
+  ];
+
+  const random =
+    signals[Math.floor(Math.random() * signals.length)];
+
+  document.getElementById("signal").textContent = random;
 }
 
-function guess(n){
-  if(finished)return;
-  const s=document.getElementById('status');
-  if(n===secret){
-    s.textContent='🎉 صح! خمنت الرقم!';
-    finished=true;
-  }else if(n<secret){
-    s.textContent='⬆️ الرقم أكبر من '+n;
-  }else{
-    s.textContent='⬇️ الرقم أصغر من '+n;
-  }
-}
-
-const box=document.getElementById('numbers');
-for(let i=1;i<=10;i++){
-  const b=document.createElement('button');
-  b.textContent=i;
-  b.onclick=()=>guess(i);
-  box.appendChild(b);
-}
-newGame();
 </script>
+
 </body>
 </html>
