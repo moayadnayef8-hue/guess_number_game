@@ -1,9 +1,29 @@
 import os
 import random
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
+
 TOKEN = os.getenv("BOT_TOKEN")
+PORT = int(os.getenv("PORT", "10000"))
+
+
+class HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Bot is running!")
+
+    def log_message(self, format, *args):
+        pass
+
+
+def start_server():
+    server = ThreadingHTTPServer(("0.0.0.0", PORT), HealthHandler)
+    server.serve_forever()
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -31,6 +51,8 @@ async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def main():
     if not TOKEN:
         raise RuntimeError("BOT_TOKEN is not set")
+
+    threading.Thread(target=start_server, daemon=True).start()
 
     app = Application.builder().token(TOKEN).build()
 
