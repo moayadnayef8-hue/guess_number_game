@@ -1,4 +1,10 @@
-FROM nginx:alpine
-COPY index.html /usr/share/nginx/html/index.html
-EXPOSE 80
+FROM python:3.12-slim
 
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY bot.py .
+
+CMD ["python", "bot.py"]
